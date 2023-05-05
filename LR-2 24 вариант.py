@@ -34,13 +34,12 @@ for sequence in match_strings:
     i = 0
     while i < len(sequence_lst) - 1:  # Проверяем каждое число с последующими
         desc_sequence = [int(sequence_lst[i], 16)]  # Заполняем первый элемент проверяемой последовательности
-        for j in range(i + 1, len(sequence_lst)):  # Проверяем последующие элементы
-            i = j - 1  # Фиксируем последний проверенный элемент последовательности
-            if int(sequence_lst[j - 1], 16) > int(sequence_lst[j],
-                                                  16):  # Если следующий элемент меньше предыдущего, то добавлем его в desc_sequence
+        for j in range(i + 1, len(sequence_lst)): 
+            i = j - 1  
+            if int(sequence_lst[j - 1], 16) > int(sequence_lst[j],  16):  # Если следующий элемент меньше предыдущего, то добавлем его в desc_sequence
                 desc_sequence.append(int(sequence_lst[j], 16))
                 continue
-            else:  # Если нет, то выходим из цикла for
+            else: 
                 break
         if len(desc_sequence) - 1:  # Если длина полученной убывающей подпоследовательности >1, то добавляем в итоговый результат
             res.append(desc_sequence)
