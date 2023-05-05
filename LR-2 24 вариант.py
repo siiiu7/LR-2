@@ -37,7 +37,7 @@ for sequence in match_strings:
         for j in range(i + 1, len(sequence_lst)):  # Проверяем последующие элементы
             i = j - 1  # Фиксируем последний проверенный элемент последовательности
             if int(sequence_lst[j - 1], 16) > int(sequence_lst[j],
-                                                  16):  # Есле следующий элемент меньше предыдущего, то добавлем его в desc_sequence
+                                                  16):  # Если следующий элемент меньше предыдущего, то добавлем его в desc_sequence
                 desc_sequence.append(int(sequence_lst[j], 16))
                 continue
             else:  # Если нет, то выходим из цикла for
