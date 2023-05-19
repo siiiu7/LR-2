@@ -10,67 +10,49 @@
 '''
 import re
 
-with open('tests.txt') as file:
-    text = file.read()
-
-num = {0: '', 1: 'один', 2: 'два', 3: 'три', 4: 'четыре', 5: 'пять',
-       6: 'шесть', 7: 'семь', 8: 'восемь', 9: 'девять'}
-doz = {0: '', 1: 'десять', 2: 'двадцать', 3: 'тридцать', 4: 'сорок',
-       5: 'пятьдесят', 6: 'шестьдесят', 7: 'семьдесят',
-       8: 'восемьдесят', 9: 'девяносто'}
-doz1 = {0: '', 10: 'десять', 11: 'одиннадцать', 12: 'двенадцать', 13: 'тринадцать',
-        14: 'четырнадцать', 15: 'пятнадцать', 16: 'шестнадцать',
-        17: 'семнадцать', 18: 'восемнадцать', 19: 'девятнадцать'}
-hun = {0: '', 1: 'сто', 2: 'двести', 3: 'триста', 4: 'четыреста',
-       5: 'пятьсот', 6: 'шестьсот', 7: 'семьсот', 8: 'восемьсот',
-       9: 'девятьсот'}
-tho = {1: 'одна тысяча', 2: 'две тысячи', 3: 'три тысячи', 4: 'четыре тысячи'}
-pattern = r'(?:(?<=\b)(?:(?:400)|(?:0*[1-3][\dA-F]{2})|(?:0*[\dA-F]{2}))\s*(?=\b)){2,}'
-match_strings = re.findall(pattern, text)
-res = []  # Результирующий список убывающих подпоследовательностей
-for sequence in match_strings:
-    # Проход по всем найденым совпадениям в тексте
-    sequence_lst = sequence.split()  # Разбиваем на слова
-    i = 0
-    while i < len(sequence_lst) - 1:  # Проверяем каждое число с последующими
-        desc_sequence = [int(sequence_lst[i], 16)]  # Заполняем первый элемент проверяемой последовательности
-        for j in range(i + 1, len(sequence_lst)): 
-            i = j - 1  
-            if int(sequence_lst[j - 1], 16) > int(sequence_lst[j],  16):  # Если следующий элемент меньше предыдущего, то добавлем его в desc_sequence
-                desc_sequence.append(int(sequence_lst[j], 16))
-                continue
-            else: 
+slovar = {0:'ноль',1:'один',2:'два',3:'три',4:'четыре',5:'пять',6:'шесть',7:'семь',8:'восемь',9:'девять',\
+     'A':'десять','B':'одинадцать','C':'двенадцать','D':'тринадцать','E':'четырнадцать','F':'пятнадцать'}
+maxim = "0"
+p = 1
+b = ['999999']
+file = open("test.txt", "r")
+marks = '''!()-[]{};?@#$%:'"\,./^&amp;*_'''
+def chi(n):#вывод числа словами
+    for j in range(len(maxim)):
+        for l in slovar:
+            if str(l) == maxim[j]:
+                print(slovar[l], end=' ')
                 break
-        if len(desc_sequence) - 1:  # Если длина полученной убывающей подпоследовательности >1, то добавляем в итоговый результат
-            res.append(desc_sequence)
-        i += 1
-if res:
-    for item in res:
-        h = str(max(item))
-        e = len(h)
-        for i in range(len(h)):
-            if int(h[i]) != 0:
-                if e == 4:
-                    print(tho[int(h[i])], end=' ')
-                    e -= 1
-                elif e == 3:
-                    print(hun[int(h[i])], end=' ')
-                    e -= 1
-                elif e == 2:
-                    if int(h[-1]) != 0 and int(h[i]) == 1:
-                        print(doz1[int(h[i:])], end=' ')
-                        e -= 2
-                    else:
-                        print(doz[int(h[i])], end=' ')
-                        e -= 1
-                elif e == 1:
-                    print(num[int(h[i])], end=' ')
-                    e -= 1
-            else:
-                e -= 1
-        print()
-else:
-    print('Подходящих под условие последовательностей не найдено')
+while True:
+    a = file.readline().split()
+    if not a:
+        print('\nКонец файла')
+        break
+    for j in a:
+        for x in j:
+            if x in marks:
+                j = j.replace(x, "")
+        res = re.findall(r'[4]{1}[0]{1}[0]{1}|[1-3]?[0-9 A-F]?[0-9 A-F]{1}', j)
+        if len(res) == 1 and len(j) == len(res[0]) and len(j)>0:
+            if int(b[-1],16) > int(res[0],16):
+                if p == 1:
+                    b = b[1:]
+                    p -=1
+                b.append(res[0])
+            elif int(b[-1],16) < int(res[0],16):
+                print("Последовательность:",' '.join(b),)
+                maxim = b[0]
+                print("Максимальное число:",end =' ')
+                chi(maxim)
+                print('')
+                b = []
+                b.append(res[0])
+    print("Последовательность:",' '.join(b),) # выводим последний массив и мин число
+    maxim = b[0]
+    print("Максимальное число:", end=' ')
+    chi(maxim)
+if maxim == 0:
+    print('В файле нет чисел, удовлетворяющих условию')
 
 
 
